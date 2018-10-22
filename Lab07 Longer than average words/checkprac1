@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# This script runs a program (given as first argument) taking input from
+# each file in $testdir/infiles and compares the output from both stdout
+# and stderr to the same named file in $testdir/outfiles with a .stdout
+# or .stderr suffix as appropriate
+# 
+# You can change the value of $testdir by giving  second and third arguments
+# of -d and <directory-name>.
+
+testdir=/home/cshome/coursework/242/tests/lab07
+
+if [ ! -x "$1" ]; then
+   echo "Usage: $0 <program-name>"
+   echo \'"$1"\' does not exist or can not be executed
+   exit 1
+fi
+
+# use alternative directory to get testfiles from
+if [ "$2" == "-d" -a -d "$3" ]; then
+   testdir=$3
+fi
+
+prog=$1
+indir=${testdir}/infiles
+outdir=${testdir}/outfiles
+tmpfile=temporary-resultfile
+
+declare -i numtests=$(ls ${indir} 2>/dev/null | wc -w)
+echo "Running black box tests"
+echo "-----------------------"
+echo "Test directory = $indir"
+echo "Number of testfiles = $numtests"
+
+if [ "$numtests" -gt 0 ]; then
+   echo
+fi
+
+for file in $(eval ls ${indir} 2>/dev/null)
+do
+   if [ ${file%\~} != ${file} ]; then # ignore ~ files
+      continue
+   fi
+   for suffix in stdout stderr
+   do
+      if [ ! -f ${outdir}/${file}.${suffix} ]; then
+         echo Error: no match for ${file}.${suffix} found in \
+            directory "'"${outdir##*/}"'"
+         continue
+      elif [ ${suffix} == stdout ]; then
+         ./$prog < ${indir}/${file} >| ${tmpfile}.stdout 2>| ${tmpfile}.stderr
+      fi
+      diff ${tmpfile}.${suffix} ${outdir}/${file}.${suffix} > /dev/null
+      if [ "$?" -ne "0" ]; then
+         echo ${suffix} using testfile ${file} failed!
+         echo
+         echo Showing difference in $suffix for ${file}
+         echo "< your output"
+         echo "> expected output"
+         echo
+         diff ${tmpfile}.${suffix} ${outdir}/${file}.${suffix}
+         echo
+      else
+         echo ${suffix} using testfile ${file} passed.
+      fi
+   done
+done

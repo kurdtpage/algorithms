@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int is_prime(int candidate) {
+    int n;
+    for(n = 2; n<candidate; n++){
+        if(candidate%n==0) return 0;
+    }
+    return 1;
+}
+
+/**
+ *   Prints the first 100 prime numbers
+ */
+int main(void) {
+    int candidate = 2;
+    int num_printed = 0;
+
+    while(num_printed < 200){
+        if(is_prime(candidate)){
+            printf("%5d is a prime\n", candidate);
+            num_printed++;
+        }
+        candidate++;
+    }
+    
+    return EXIT_SUCCESS;
+}

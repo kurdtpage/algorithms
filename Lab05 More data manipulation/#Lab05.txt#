@@ -1,0 +1,27 @@
+242 Lab05 Shaun Henderson 6484285
+
+1a. To make the main code easier to understand. Hides unneccesary details
+1b. char
+1c. Strings need the termination character \0
+1d. No, arrays are immutable
+1e. Max length of 79 characters (STRING_LEN is set to 80 = 79 + \0)
+1f. wordlist[0][0] = 1 So { 0=3*1, 1=5*1, 2=4*1, 3=5*1 }
+
+
+
+char* wordlist[3];
+wordlist -> {NULL, NULL, NULL};
+wordlist[0] = 
+
+wordlist[0][0] -> char
+wordlist[0] -> char[]
+
+wordlist -> {{dogs}, {hajksd}. {}}
+
+[0] -> {'d', 'o', '\0'};
+[1] -> hfjkashd
+
+
+
+
+[5] -> NULL
